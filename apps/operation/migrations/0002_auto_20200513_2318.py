@@ -16,29 +16,29 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='userfavorite',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='用户'),
-        ),
-        migrations.AddField(
-            model_name='usercourse',
-            name='course',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='course.Course', verbose_name='课程'),
-        ),
-        migrations.AddField(
-            model_name='usercourse',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='用户'),
-        ),
-        migrations.AddField(
-            model_name='coursecomments',
-            name='course',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='course.Course', verbose_name='课程'),
-        ),
-        migrations.AddField(
-            model_name='coursecomments',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='用户'),
-        ),
+        # migrations.AddField(
+        #     model_name='userfavorite',
+        #     name='user',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='用户'),
+        # ),
+        # migrations.AddField(
+        #     model_name='usercourse',
+        #     name='course',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='course.Course', verbose_name='课程'),
+        # ),
+        # migrations.AddField(
+        #     model_name='usercourse',
+        #     name='user',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='用户'),
+        # ),
+        # migrations.AddField(
+        #     model_name='coursecomments',
+        #     name='course',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='course.Course', verbose_name='课程'),
+        # ),
+        # migrations.AddField(
+        #     model_name='coursecomments',
+        #     name='user',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='用户'),
+        # ),
     ]
