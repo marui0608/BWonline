@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.views.static import serve
 from django.urls import path,include,re_path
 from django.views.generic.base import TemplateView
-from apps.users.views import LoginView,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView
+from apps.users.views import LoginView,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView,LogoutView
 from apps.organization.views import OrgView
 from Mary.settings import MEDIA_ROOT
 
@@ -36,4 +36,7 @@ urlpatterns = [
     path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd'),
     path("org/", include('organization.urls', namespace="org")),
     path("course/",include('course.urls',namespace='course')),
+    # 个人信息
+    path("users/",include('users.urls',namespace="users")),
+    path('logout/', LogoutView.as_view(), name="logout"),
 ]
