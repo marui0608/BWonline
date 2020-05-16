@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponse,HttpResponseRedirect
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
-from users.models import UserProfile,EmailVerifyRecord
+from users.models import UserProfile,EmailVerifyRecord,Banner
 from operation.models import UserCourse,UserFavorite,UserMessage
 from organization.models import CourseOrg,Teacher
 from course.models import Course
@@ -13,7 +13,28 @@ from .forms import LoginForm,RegisterForm,ForgetPwdForm,ModifyPwdForm,UploadImag
 from utils.email_send import send_register_eamil
 from utils.mixin_utils import LoginRequiredMixin
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render_to_response
 # Create your views here.
+
+
+class IndexView(View):
+    '''首页'''
+    def get(self,request):
+        #轮播图
+        all_banners = Banner.objects.all().order_by('index')
+        #课程
+        courses = Course.objects.filter(is_banner=False)[:6]
+        #轮播课程
+        banner_courses = Course.objects.filter(is_banner=True)[:3]
+        #课程机构
+        course_orgs = Course.objects.all()[:15]
+        return render(request,'index.html',{
+            'all_banners':all_banners,
+            'courses':courses,
+            'banner_courses':banner_courses,
+            'course_orgs':course_orgs,
+        })
+
 
 #邮箱和用户名都可以登录
 # 基础ModelBackend类，因为它有authenticate方法
@@ -31,6 +52,8 @@ class CustomBackend(ModelBackend):
             return None
 
 class LoginView(View):
+    '''用户登录'''
+
     def get(self,request):
         return render(request, 'login.html')
 
@@ -43,13 +66,12 @@ class LoginView(View):
             pass_word = request.POST.get('password', None)
             # 成功返回user对象,失败None
             user = authenticate(username=user_name, password=pass_word)
-            print(user)
             # 如果不是null说明验证成功
             if user is not None:
                 if user.is_active:
                     # 只有注册激活才能登录
                     login(request, user)
-                    return render(request, 'index.html')
+                    return HttpResponseRedirect(reverse('index'))
                 else:
                     return render(request, 'login.html', {'msg': '用户名或密码错误', 'login_form': login_form})
             # 只有当用户名或密码不存在时，才返回错误信息到前端
@@ -305,3 +327,36 @@ class LogoutView(View):
         logout(request)
         from django.urls import reverse
         return HttpResponseRedirect(reverse('index'))
+
+
+def pag_not_found(request,exception,template_name="404.html"):
+    # 全局404处理函数
+    response = render_to_response('404.html', {})
+    response.status_code = 404
+    return response
+
+def page_error(request,template_name="500.html"):
+    # 全局500处理函数
+    from django.shortcuts import render_to_response
+    response = render_to_response('500.html', {})
+    response.status_code = 500
+    return response
+
+
+class LoginUnsafeView(View):
+    def get(self, request):
+        return render(request, "login.html", {})
+    def post(self, request):
+        user_name = request.POST.get("username", "")
+        pass_word = request.POST.get("password", "")
+
+        import MySQLdb
+        conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='root', db='mxonline', charset='utf8')
+        cursor = conn.cursor()
+        sql_select = "select * from users_userprofile where email='{0}' and password='{1}'".format(user_name, pass_word)
+
+        result = cursor.execute(sql_select)
+        for row in cursor.fetchall():
+            # 查询到用户
+            pass
+        print('test')

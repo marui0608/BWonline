@@ -18,14 +18,15 @@ from django.contrib import admin
 from django.views.static import serve
 from django.urls import path,include,re_path
 from django.views.generic.base import TemplateView
-from apps.users.views import LoginView,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView,LogoutView
+from apps.users.views import LoginView,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView,LogoutView,LoginUnsafeView,IndexView
 from apps.organization.views import OrgView
-from Mary.settings import MEDIA_ROOT
+from Mary.settings import MEDIA_ROOT,STATIC_ROOT
 
 urlpatterns = [
     path('captcha/',include('captcha.urls')),
     path('xadmin/', xadmin.site.urls),
-    path('',TemplateView.as_view(template_name='index.html'),name='index'),
+    path('',IndexView.as_view(),name='index'),
+    # path('',TemplateView.as_view(template_name='index.html'),name='index'),
     path('login/',LoginView.as_view(),name='login'),
     path('register/',RegisterView.as_view(),name='register'),
     path('forget/',ForgetPwdView.as_view(),name='forget_pwd'),
@@ -39,4 +40,13 @@ urlpatterns = [
     # 个人信息
     path("users/",include('users.urls',namespace="users")),
     path('logout/', LogoutView.as_view(), name="logout"),
+    #静态文件
+    re_path(r'^static/(?P<path>.*)', serve, {"document_root": STATIC_ROOT }),
+    path('login/', LoginUnsafeView.as_view(), name='login'),
 ]
+
+
+# 全局404页面配置
+handler404 = 'users.views.pag_not_found'
+# 全局500页面配置
+handler500 = 'users.views.page_error'

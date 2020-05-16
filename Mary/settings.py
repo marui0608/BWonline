@@ -23,14 +23,16 @@ sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
 SECRET_KEY = 'iok8zccq4ic+z+=^pu810k10+es%_6(x#+j@@jy@x@+f3rvh1s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 # 不使用系统自带的后台user，使用自己的
 AUTH_USER_MODEL = 'users.UserProfile'
 # 设置 自定义登陆验证
 AUTHENTICATION_BACKENDS = (
     'users.views.CustomBackend',
 )
-ALLOWED_HOSTS = []
+# 设置 可以访问的域名
+# ALLOWED_HOSTS = ['47.93.127.78']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -142,6 +144,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'static'),
 )
+# 静态文件的收集路径
+STATIC_ROOT = os.path.join(BASE_DIR,'static/')
 
 # 配置邮箱
 EMAIL_HOST = 'smtp.qq.com'

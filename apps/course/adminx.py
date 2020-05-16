@@ -25,7 +25,7 @@ class VideoAdmin(object):
     list_display = ['lesson','name','add_time']
     search_fields = ['lesson','name']
     list_filter = ['lesson','name','add_time']
-
+    model_icon = 'fa fa-book'
 
 # 管理器
 class CourseResourceAdmin(object):
